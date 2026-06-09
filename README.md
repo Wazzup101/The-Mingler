@@ -10,12 +10,23 @@ Public documentation and scripts for **The Mingler** — a third-party Discord b
 
 ## What is published here
 
-This repository is for **transparency and setup help** — not the full bot source code.
+This repository is for **transparency and setup help** — not the full bot source code. It documents **The Mingler** as a whole, while the files below are split into two groups: bot-wide policies, and the self-contained **Companion `/register` sync apparatus**.
+
+### Bot (overall)
+
+These apply to the entire bot, not just the sync feature.
 
 | Path | Purpose |
 |------|---------|
 | [docs/TERMS_OF_SERVICE.md](docs/TERMS_OF_SERVICE.md) | Bot Terms of Service (Discord Developer Portal) |
 | [docs/PRIVACY_POLICY.md](docs/PRIVACY_POLICY.md) | Bot Privacy Policy (Discord Developer Portal) |
+
+### Companion `/register` sync apparatus
+
+The Companion-client sync feature: the guide plus the exact files shipped to players for the `/register` push flow.
+
+| Path | Purpose |
+|------|---------|
 | [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md) | Push sync guide (`/register script`, `/register link`) for players and bot hosts |
 | [scripts/register-sync.ps1](scripts/register-sync.ps1) | PowerShell script (readable source; also shipped in `register-sync.zip`) |
 | [scripts/register-sync.cmd](scripts/register-sync.cmd) | Launcher for the PowerShell script |
