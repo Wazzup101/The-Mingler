@@ -43,6 +43,10 @@ You agree **not** to:
 
 The operator may restrict, suspend, or block use of the bot (including per-user blocks) for violations or abuse.
 
+The operator **reserves the right** to block any user from using the service, with or without prior notice, when the operator reasonably believes that is necessary for safety, security, legal compliance, or the integrity of the service.
+
+The operator **reserves the right** not to disclose the specific reason for a block, restriction, or suspension when doing so could compromise safety, an ongoing investigation, another person’s privacy, or cooperation with law enforcement.
+
 ---
 
 ## 5. Registration and game data (optional)
@@ -83,6 +87,8 @@ To the fullest extent permitted by law, the operator is not liable for indirect,
 
 The operator’s total liability for any claim related to the bot is limited to **USD $0** (the bot is offered free of charge), except where liability cannot be excluded by law.
 
+**What this means:** The Mingler is a free tool—there is no fee, subscription, or purchase. This cap means you generally cannot sue the operator for money damages arising from use of the bot. Some jurisdictions do not allow certain liability to be waived entirely; in those cases, only the minimum liability required by law applies. This section does **not** limit your right to stop using the bot or to request deletion of your data under the [Privacy Policy](./PRIVACY_POLICY.md).
+
 ---
 
 ## 9. Changes
@@ -101,7 +107,7 @@ How we handle information is described in the [Privacy Policy](./PRIVACY_POLICY.
 
 ## 11. Governing law
 
-These Terms are governed by the laws of the **State of California, United States**, without regard to conflict-of-law rules, except where mandatory consumer protections in your jurisdiction apply.
+These Terms are governed by the laws of the **State of Arizona, United States**, without regard to conflict-of-law rules, except where mandatory consumer protections in your jurisdiction apply.
 
 ---
 
