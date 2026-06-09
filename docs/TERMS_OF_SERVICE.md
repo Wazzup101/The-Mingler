@@ -109,6 +109,8 @@ How we handle information is described in the [Privacy Policy](./PRIVACY_POLICY.
 
 These Terms are governed by the laws of the **State of Arizona, United States**, without regard to conflict-of-law rules, except where mandatory consumer protections in your jurisdiction apply.
 
+**What this means:** If there is a legal dispute about the bot, it is handled under the operator's home-state law. If the consumer-protection laws where you live give you stronger rights, those still apply to you.
+
 ---
 
 ## 12. Contact
