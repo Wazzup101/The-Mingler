@@ -14,6 +14,8 @@ This repository is for **transparency and setup help** — not the full bot sour
 
 | Path | Purpose |
 |------|---------|
+| [docs/TERMS_OF_SERVICE.md](docs/TERMS_OF_SERVICE.md) | Bot Terms of Service (Discord Developer Portal) |
+| [docs/PRIVACY_POLICY.md](docs/PRIVACY_POLICY.md) | Bot Privacy Policy (Discord Developer Portal) |
 | [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md) | Push sync guide (`/register script`, `/register link`) for players and bot hosts |
 | [scripts/register-sync.ps1](scripts/register-sync.ps1) | PowerShell script (readable source; also shipped in `register-sync.zip`) |
 | [scripts/register-sync.cmd](scripts/register-sync.cmd) | Launcher for the PowerShell script |
