@@ -1,6 +1,6 @@
 # Push sync for `/register`
 
-When the bot runs on a **different computer** than the player’s game, use **push sync** (`/register script` + `/register link`).
+When the bot runs on a **different computer** than the player's game, use **push sync** (`/register script` + `/register link`).
 
 ## Flow
 
@@ -21,7 +21,20 @@ Public source and docs: [github.com/Wazzup101/The-Mingler](https://github.com/Wa
 
 ## Bot configuration
 
-In `JSON Storage/Configuration/config.json`:
+Full setup guide (home LAN vs internet HTTPS, Cloudflare Tunnel, Caddy, migration checklist):
+
+**[REGISTER_SYNC_DEPLOYMENT.md](./REGISTER_SYNC_DEPLOYMENT.md)**
+
+Example JSON snippets: [`docs/examples/register-sync-home-lan.config.json`](./examples/register-sync-home-lan.config.json), [`docs/examples/register-sync-internet.config.json`](./examples/register-sync-internet.config.json), [`docs/examples/register-sync-mingler.cc.config.json`](./examples/register-sync-mingler.cc.config.json) (production: `https://sync.mingler.cc`).
+
+### Deployment modes (summary)
+
+| Mode | `listen_host` | `lan_bind` | `public_base_url` | Reverse proxy |
+|------|---------------|------------|---------------------|---------------|
+| **Home LAN** | `0.0.0.0` | `true` | `http://<bot-LAN-IP>:3847` | None |
+| **Internet** | `127.0.0.1` | `false` | `https://sync.yourdomain.com` | Cloudflare Tunnel, Caddy, or nginx |
+
+In `JSON Storage/Configuration/config.json` → `register_sync` (internet template):
 
 ```json
 "register_sync": {
@@ -29,7 +42,7 @@ In `JSON Storage/Configuration/config.json`:
   "lan_bind": false,
   "listen_host": "127.0.0.1",
   "listen_port": 3847,
-  "public_base_url": "https://your-public-hostname",
+  "public_base_url": "https://sync.yourdomain.com",
   "token_ttl_minutes": 15,
   "max_body_bytes": 2097152
 }
@@ -39,25 +52,25 @@ In `JSON Storage/Configuration/config.json`:
 |--------|---------|
 | `listen_host` / `listen_port` | Where the Node HTTP server binds (default `127.0.0.1:3847`). |
 | `lan_bind` | Must be **`true`** to bind `listen_host` `0.0.0.0` (home LAN). If `false` and host is `0.0.0.0`, the bot binds **`127.0.0.1` only**. |
-| `lan_clients_only` | Default **`true`** with LAN bind: only private/LAN client IPs may call sync/health (helps if port 3847 is accidentally forwarded). |
+| `lan_clients_only` | With **LAN bind only**: only private/LAN client IPs may call sync/health. **Ignored** when using `127.0.0.1` + HTTPS proxy (internet mode). |
 | `public_base_url` | URL players use in `/register link` (HTTPS for internet; `http://192.168.x.x` OK for home LAN only). |
-| `public_base_url_alt` | Optional second LAN URL (e.g. hotspot). |
+| `public_base_url_alt` | Optional second LAN URL (e.g. hotspot). Usually omitted in internet mode. |
 | `token_ttl_minutes` | Link expiry. |
 | `max_body_bytes` | Max POST body size. |
 
-**Recommended (internet-facing):** `listen_host` `127.0.0.1`, `lan_bind` `false`, HTTPS reverse proxy to port 3847, `public_base_url` `https://…`.
+**Do not** port-forward plain HTTP port **3847** to the internet.
 
-**Home LAN only:** `lan_bind` `true`, `listen_host` `0.0.0.0`, `public_base_url` `http://<bot-LAN-IP>:3847`. **Do not** port-forward plain HTTP to the internet.
-
-Environment overrides: `REGISTER_SYNC_PUBLIC_URL`, `REGISTER_SYNC_LISTEN_HOST`, `REGISTER_SYNC_LAN_BIND`, `REGISTER_SYNC_ENABLED`, etc. (see `utils/register/registerSyncConfig.js`).
+Environment overrides: `REGISTER_SYNC_PUBLIC_URL`, `REGISTER_SYNC_LISTEN_HOST`, `REGISTER_SYNC_LAN_BIND`, `REGISTER_SYNC_ENABLED`, etc. (see bot `utils/register/registerSyncConfig.js`).
 
 ## Reverse proxy (example)
 
-Expose the API behind nginx/Caddy on the same machine as the bot:
+Expose the API behind Cloudflare Tunnel, Caddy, or nginx on the same machine as the bot:
 
 ```
-https://api.example.com/api/register/sync  →  http://127.0.0.1:3847/api/register/sync
+https://sync.yourdomain.com/api/register/sync  →  http://127.0.0.1:3847/api/register/sync
 ```
+
+Example configs: [`scripts/ops/cloudflared-register-sync.config.example.yml`](../scripts/ops/cloudflared-register-sync.config.example.yml), [`scripts/ops/Caddyfile.register-sync.example`](../scripts/ops/Caddyfile.register-sync.example).
 
 Health check: `GET /api/register/health`
 

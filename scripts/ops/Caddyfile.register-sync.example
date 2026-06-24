@@ -1,0 +1,9 @@
+# Caddy — HTTPS reverse proxy for register sync (The Mingler)
+#
+# Requires: bot register_sync on 127.0.0.1:3847, public_base_url https://sync.yourdomain.com
+# Usage: caddy run --config Caddyfile.register-sync.example
+# Docs: docs/REGISTER_SYNC_DEPLOYMENT.md
+
+sync.yourdomain.com {
+	reverse_proxy 127.0.0.1:3847
+}

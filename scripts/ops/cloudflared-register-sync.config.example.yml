@@ -1,0 +1,21 @@
+# Cloudflare Tunnel — register sync only (The Mingler)
+#
+# 1. cloudflared tunnel login
+# 2. cloudflared tunnel create mingler-register-sync
+# 3. cloudflared tunnel route dns mingler-register-sync sync.yourdomain.com
+# 4. Copy this file to %USERPROFILE%\.cloudflared\config.yml (or merge ingress rules)
+# 5. Edit tunnel name, credentials-file, and hostname below
+# 6. cloudflared tunnel run mingler-register-sync
+# 7. Bot: register_sync listen_host 127.0.0.1, lan_bind false,
+#    public_base_url https://sync.yourdomain.com
+#
+# Docs: docs/REGISTER_SYNC_DEPLOYMENT.md
+
+tunnel: mingler-register-sync
+credentials-file: C:\Users\YOU\.cloudflared\TUNNEL-UUID-HERE.json
+
+ingress:
+  # Only this hostname reaches the bot sync API; everything else 404.
+  - hostname: sync.yourdomain.com
+    service: http://127.0.0.1:3847
+  - service: http_status:404
