@@ -27,9 +27,7 @@ The Companion-client sync feature: the guide plus the exact files shipped to pla
 
 | Path | Purpose |
 |------|---------|
-| [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md) | Push sync guide (`/register script`, `/register link`) for players and bot hosts |
-| [docs/REGISTER_SYNC_DEPLOYMENT.md](docs/REGISTER_SYNC_DEPLOYMENT.md) | Operator guide: home LAN vs internet HTTPS (Cloudflare Tunnel, Caddy) |
-| [scripts/ops/README-mingler.cc.md](scripts/ops/README-mingler.cc.md) | Production runbook: `https://sync.mingler.cc` via Cloudflare Tunnel |
+| [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md) | Push sync guide (`/register script`, `/register link`) for players |
 | [scripts/register-sync.ps1](scripts/register-sync.ps1) | PowerShell script (readable source; also shipped in `register-sync.zip`) |
 | [scripts/register-sync.cmd](scripts/register-sync.cmd) | Launcher for the PowerShell script |
 | [scripts/register-sync-pack/README.txt](scripts/register-sync-pack/README.txt) | Plain-text guide included in the ZIP from `/register script` |
@@ -57,12 +55,6 @@ Full details: [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md).
 - The script reads the TTR **Companion API on your PC only** (`127.0.0.1`, ports 1547–1554) and POSTs JSON **once** to the HTTPS URL in your `/register link` (production: **`https://sync.mingler.cc`**). It does not control the game, install software, or stay running.
 
 While playing TTR you must still follow [TTR Terms of Service](https://www.toontownrewritten.com/terms) and [Privacy Policy](https://www.toontownrewritten.com/privacy).
-
----
-
-## Bot hosts (operators)
-
-If you run the bot yourself, see [docs/REGISTER_SYNC_DEPLOYMENT.md](docs/REGISTER_SYNC_DEPLOYMENT.md) and **Bot configuration** in [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md).
 
 ---
 

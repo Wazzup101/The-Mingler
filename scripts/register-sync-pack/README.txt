@@ -82,10 +82,3 @@ OPEN A TERMINAL IN THIS FOLDER
 
   Note: the register-sync.cmd launcher is Windows-only. On macOS/Linux run the
   .ps1 directly with pwsh as shown above.
-
-BOT HOST (operators — players can skip)
----------------------------------------
-  Public sync uses HTTPS (for example https://sync.mingler.cc from
-  /register link). The game PC can be on any network.
-  See https://github.com/Wazzup101/The-Mingler/blob/main/docs/REGISTER_PUSH_SYNC.md
-  Home-LAN-only setups are documented there for private testing.
