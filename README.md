@@ -1,4 +1,4 @@
-# The Mingler
+﻿# The Mingler
 
 Public documentation and scripts for **The Mingler** — a third-party Discord bot for Toontown Rewritten (TTR) communities.
 
@@ -61,3 +61,17 @@ While playing TTR you must still follow [TTR Terms of Service](https://www.toont
 ## Questions or issues
 
 Use **`/tickets`** to send feedback, requests, and more to the bot operator (@wazzup_101).
+---
+
+## Item Image Assets
+
+Browseable copies of the item image collections (kept in sync from their own repos):
+
+| Collection | Path in this repo |
+|------------|-------------------|
+| [Laser Beams](https://github.com/Wazzup101/Laser-Beams) | `assets/item-images/laser-beams/` |
+| [Water Balloons](https://github.com/Wazzup101/Water-Balloons) | `assets/item-images/water-balloons/` |
+| [Snowballs](https://github.com/Wazzup101/Snowballs) | `assets/item-images/snowballs/` |
+
+Source repos stay independent. Edit them there, then re-run sync-mingler-assets.ps1 to update this mirror.
+
