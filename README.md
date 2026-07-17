@@ -38,6 +38,8 @@ Download the packaged ZIP in Discord via **`/register script`** (ephemeral). You
 
 ## Quick start (players)
 
+Use these in **any Discord server** where The Mingler is installed.
+
 1. Accept **`/register`** terms in Discord.
 2. **`/register script`** — download and extract `register-sync.zip`; read `README.txt`.
 3. Game open, logged in, **Companion App Support** ON (accept the in-game prompt).

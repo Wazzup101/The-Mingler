@@ -4,7 +4,7 @@ When the bot runs on a **different computer** than your game, use **push sync** 
 
 ## Flow
 
-1. In Discord: **`/register link`**
+1. In Discord (any server where The Mingler is installed): **`/register link`**
    - Accept terms if prompted.
    - Bot replies **ephemerally** with a **one-time token** (15 minutes by default) and a PowerShell command.
 
