@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Mingler Sync logo</title>
+  <desc id="desc">Two synchronization arrows surrounding three dots on a navy background.</desc>
+  <rect width="512" height="512" rx="112" fill="#181e36"/>
+  <circle cx="196" cy="256" r="19" fill="#5ddcb7"/><circle cx="256" cy="256" r="19" fill="#5ddcb7"/><circle cx="316" cy="256" r="19" fill="#5ddcb7"/>
+  <path d="M141 205c28-52 83-87 146-87 46 0 89 19 120 50l22-24c9-10 26-3 25 11l-4 88c0 8-7 14-15 13l-87-10c-14-2-18-19-8-28l25-22c-21-19-48-29-78-29-44 0-83 24-104 59-7 12-22 17-34 10-12-6-17-21-8-31z" fill="#5ddcb7"/>
+  <path d="M371 307c-28 52-83 87-146 87-46 0-89-19-120-50l-22 24c-9 10-26 3-25-11l4-88c0-8 7-14 15-13l87 10c14 2 18 19 8 28l-25 22c21 19 48 29 78 29 44 0 83-24 104-59 7-12 22-17 34-10 12 6 17 21 8 31z" fill="#6991ff"/>
+</svg>
+

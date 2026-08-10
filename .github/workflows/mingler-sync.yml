@@ -1,0 +1,22 @@
+name: Mingler Sync
+
+on:
+  pull_request:
+    paths: ['apps/MinglerSync/**', '.github/workflows/mingler-sync.yml']
+  push:
+    branches: [main]
+    paths: ['apps/MinglerSync/**', '.github/workflows/mingler-sync.yml']
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: apps/MinglerSync
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet build MinglerSync.sln --configuration Release
+      - run: dotnet run --project tests/MinglerSync.Core.Tests/MinglerSync.Core.Tests.csproj --configuration Release

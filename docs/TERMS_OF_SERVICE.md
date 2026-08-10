@@ -54,8 +54,9 @@ The operator **reserves the right** not to disclose the specific reason for a bl
 Some features let you **voluntarily** link TTR toon information to your Discord account via `/register` and related tools.
 
 - **Companion App Support** must be enabled in-game, and you must accept TTR’s in-game Companion prompt.
-- Sync is **user-initiated**. The bot reads Companion API data only when you run sync (or when you run the optional push-sync script on your own game PC).
+- Sync is **user-initiated**. Mingler Sync and the PowerShell fallback read the local Companion API only after you start a scan and upload only after an explicit action.
 - The bot does **not** control your game client, account, or characters.
+- The Windows app is a free convenience tool with no gameplay automation, background syncing, or guarantee of availability or compatibility.
 - You may stop using registration features at any time; see the [Privacy Policy](./PRIVACY_POLICY.md) for data requests.
 
 Public documentation for push sync: [REGISTER_PUSH_SYNC.md](./REGISTER_PUSH_SYNC.md).

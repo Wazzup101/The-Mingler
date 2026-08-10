@@ -21,12 +21,14 @@ These apply to the entire bot, not just the sync feature.
 | [docs/TERMS_OF_SERVICE.md](docs/TERMS_OF_SERVICE.md) | Bot Terms of Service (Discord Developer Portal) |
 | [docs/PRIVACY_POLICY.md](docs/PRIVACY_POLICY.md) | Bot Privacy Policy (Discord Developer Portal) |
 
-### Companion `/register` sync apparatus
+### Companion `/register` sync tools
 
-The Companion-client sync feature: the guide plus the exact files shipped to players for the `/register` push flow.
+The optional Companion-client sync feature includes a beginner-friendly Windows
+app and the existing PowerShell fallback.
 
 | Path | Purpose |
 |------|---------|
+| [apps/MinglerSync](apps/MinglerSync) | Inspectable Windows app source, tests, and Microsoft Store packaging |
 | [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md) | Push sync guide (`/register script`, `/register link`) for players |
 | [scripts/register-sync.ps1](scripts/register-sync.ps1) | PowerShell script (readable source; also shipped in `register-sync.zip`) |
 | [scripts/register-sync.cmd](scripts/register-sync.cmd) | Launcher for the PowerShell script |
@@ -41,10 +43,13 @@ Download the packaged ZIP in Discord via **`/register script`** (ephemeral). You
 Use these in **any Discord server** where The Mingler is installed.
 
 1. Accept **`/register`** terms in Discord.
-2. **`/register script`** — download and extract `register-sync.zip`; read `README.txt`.
-3. Game open, logged in, **Companion App Support** ON (accept the in-game prompt).
-4. **`/register link`** — copy **only** the PowerShell line from step 4; run it in the folder where you extracted the ZIP.
-5. **`/register status`** — optional confirmation.
+2. Open the game, log in, enable **Companion App Support**, and accept its prompt.
+3. Run **`/register link`** and copy the private command block.
+4. Paste it into Mingler Sync, find your toons, review the names, and confirm sync.
+5. Use **`/register status`** for optional confirmation.
+
+Until the Microsoft Store listing is published, use **`/register script`** as
+the supported fallback. Extract the ZIP and follow its `README.txt`.
 
 Full details: [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md).
 
@@ -54,7 +59,7 @@ Full details: [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md).
 
 - Only run `register-sync` if you trust **The Mingler** operator (@wazzup_101).
 - Use sync URLs and tokens **only** from your own **`/register link`** response — never use foreign tokens.
-- The script reads the TTR **Companion API on your PC only** (`127.0.0.1`, ports 1547–1554) and POSTs JSON **once** to the HTTPS URL in your `/register link` (production: **`https://sync.mingler.cc`**). It does not control the game, install software, or stay running.
+- The app and fallback read the TTR **Companion API on your PC only** (`127.0.0.1`, ports 1547–1554) after you start a scan. They upload only after an explicit action, do not control the game, collect passwords or telemetry, or stay running in the background.
 
 While playing TTR you must still follow [TTR Terms of Service](https://www.toontownrewritten.com/terms) and [Privacy Policy](https://www.toontownrewritten.com/privacy).
 

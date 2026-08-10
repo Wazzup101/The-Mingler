@@ -39,7 +39,16 @@ If you choose to use `/register` or related sync tools, we may store:
 - Game progress snapshots (for example: gag tracks, tasks, suits, fishing, gardening, racing, or similar stats) **only as imported by your sync**
 - Timestamps of last successful sync and basic sync status (success/error summaries)
 
-Sync is **opt-in** and **user-initiated**. The optional push-sync script runs on **your** game PC, reads the local Companion API (`127.0.0.1` only), and sends data to the bot only when you run it with a token from your own `/register link`.
+Sync is **opt-in** and **user-initiated**. Mingler Sync and the optional
+PowerShell fallback run on **your** game PC, read the local Companion API
+(`127.0.0.1`, ports 1547–1554) only after you start a scan, and send reviewed
+data only after an explicit upload action using your own `/register link`.
+
+The Windows app keeps the one-time pairing token and Companion response in
+memory for the active session. It clears the pairing information after an
+upload attempt and does not add telemetry, background syncing, or local player
+data storage. Microsoft and GitHub separately process Store downloads and
+repository access under their own privacy policies.
 
 We do **not** collect your TTR password, payment information, or full Companion authorization secrets from your game session.
 
