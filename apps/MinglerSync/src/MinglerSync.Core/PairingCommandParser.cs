@@ -10,6 +10,7 @@ public static partial class PairingCommandParser
     {
         pairing = null;
         error = string.Empty;
+
         if (string.IsNullOrWhiteSpace(input))
         {
             error = "Paste the command from /register link first.";
@@ -18,34 +19,57 @@ public static partial class PairingCommandParser
 
         if (input.Length > 8192)
         {
-            error = "That pairing command is unexpectedly long. Run /register link again.";
+            error = "That pairing command is unexpectedly long. Run /register link again and copy only the command block.";
             return false;
         }
 
         var url = GetArgument(input, SyncUrlPattern());
         var token = GetArgument(input, TokenPattern());
+
         if (string.IsNullOrWhiteSpace(url) || string.IsNullOrWhiteSpace(token))
         {
-            error = "Copy the entire private command block from /register link.";
+            error = "That does not look like the full /register link command. Copy the entire command block from Discord.";
             return false;
         }
 
-        if (!Uri.TryCreate(url.Trim(), UriKind.Absolute, out var uri) ||
-            !SyncEndpointPolicy.TryValidate(uri, out error))
+        if (url.Length > 2048 || token.Length > 4096)
+        {
+            error = "That pairing command is unexpectedly long. Run /register link again.";
+            return false;
+        }
+
+        if (!Uri.TryCreate(url.Trim(), UriKind.Absolute, out var syncUri))
+        {
+            error = "The registration address in that command is not valid. Run /register link again.";
+            return false;
+        }
+
+        if (!SyncEndpointPolicy.TryValidate(syncUri, out error))
         {
             return false;
         }
 
-        pairing = new PairingDetails(uri, token.Trim());
+        pairing = new PairingDetails(syncUri, token.Trim());
         return true;
     }
 
     private static string? GetArgument(string input, Regex pattern)
     {
         var match = pattern.Match(input);
-        return match.Success
-            ? match.Groups.Cast<Group>().Skip(1).FirstOrDefault(group => group.Success)?.Value
-            : null;
+        if (!match.Success)
+        {
+            return null;
+        }
+
+        for (var i = 1; i < match.Groups.Count; i++)
+        {
+            if (match.Groups[i].Success)
+            {
+                return match.Groups[i].Value;
+            }
+        }
+
+        return null;
     }
 
     [GeneratedRegex("""-SyncUrl\s+(?:"([^"]+)"|'([^']+)'|(\S+))""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
@@ -54,4 +78,3 @@ public static partial class PairingCommandParser
     [GeneratedRegex("""-Token\s+(?:"([^"]+)"|'([^']+)'|(\S+))""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex TokenPattern();
 }
-

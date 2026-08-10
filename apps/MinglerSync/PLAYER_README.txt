@@ -1,17 +1,41 @@
-MINGLER SYNC
+MINGLER SYNC — STAGE 1 TEST BUILD
+
+Mingler Sync helps you register your own Toontown Rewritten toon data with
+The Mingler Discord bot without opening PowerShell or a terminal.
+
+HOW TO USE
 
 1. Open Toontown Rewritten and log into the toon(s) you want to register.
-2. Enable Companion App Support and accept the in-game prompt.
-3. In Discord, run /register link and copy the private command block.
-4. Paste it into Mingler Sync and click Find my toons.
-5. Review the names, then click Sync to Discord.
+2. Turn on Companion App Support in Settings > Gameplay > Miscellaneous.
+3. Accept the Companion prompt shown by the game.
+4. In Discord, run /register link and copy the entire private command block.
+5. Open "Mingler Sync.exe" and paste that command.
+6. Click Find my toons, review the names, then click Sync to Discord.
+7. In Discord, run /register status to confirm if you want to double-check.
 
-The app reads the local Companion API only after you click, uploads only after
-you confirm, keeps the pairing token in memory, and clears it after use. It does
-not collect passwords or telemetry, control gameplay, or run background syncs.
+PRIVACY AND SAFETY
 
-The PowerShell /register script remains available as a fallback.
+- The app reads 127.0.0.1 ports 1547-1554 only after you click Find my toons.
+- It reads Companion data only. It does not control or automate the game.
+- Your pairing token is kept in memory, hidden on screen, and cleared after use.
+- The app does not collect passwords, chat, telemetry, or unrelated device data.
+- If an unexpected app fault occurs while a valid pairing link is present, the
+  app may report its phase, version, and bounded error type/message to a private
+  operator channel. It does not report the token, raw Companion data, password,
+  file paths, or device inventory. Network failures may prevent delivery.
+- Internet uploads require HTTPS. Plain HTTP is accepted only for a private
+  home-network address supplied by /register link.
+- Do not share your /register link command. It expires and is one-time use.
+- Install only from the Microsoft Store or inspect/build the public source. A
+  replaced or modified executable could misuse anything pasted into it.
+- No software is guaranteed vulnerability-free. Keep Windows and Microsoft
+  Defender current and use /tickets if you see suspicious behavior.
 
-Mingler Sync is a free, unofficial third-party tool. It is not affiliated with
-or endorsed by Toontown Rewritten, Disney, Discord, or their staff.
+FALLBACK
 
+If this test app does not work, the existing /register script PowerShell ZIP is
+still supported and has not been removed or changed.
+
+Mingler Sync and The Mingler are unofficial third-party tools and are not
+affiliated with Toontown Rewritten, Disney, or their staff. You must continue
+to follow all Toontown Rewritten and Discord rules.

@@ -51,6 +51,9 @@ Use these in **any Discord server** where The Mingler is installed.
 Until the Microsoft Store listing is published, use **`/register script`** as
 the supported fallback. Extract the ZIP and follow its `README.txt`.
 
+Mingler Sync uses The Mingler's current public Discord application artwork as
+its Windows and Store icon.
+
 Full details: [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md).
 
 ---
@@ -60,6 +63,8 @@ Full details: [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md).
 - Only run `register-sync` if you trust **The Mingler** operator (@wazzup_101).
 - Use sync URLs and tokens **only** from your own **`/register link`** response — never use foreign tokens.
 - The app and fallback read the TTR **Companion API on your PC only** (`127.0.0.1`, ports 1547–1554) after you start a scan. They upload only after an explicit action, do not control the game, collect passwords or telemetry, or stay running in the background.
+- Unexpected app faults may send only the bounded diagnostic documented in the [Privacy Policy](docs/PRIVACY_POLICY.md); tokens and raw Companion data are excluded.
+- Install only from the Microsoft Store or inspect/build this public source. Modified or impersonated downloads may be unsafe.
 
 While playing TTR you must still follow [TTR Terms of Service](https://www.toontownrewritten.com/terms) and [Privacy Policy](https://www.toontownrewritten.com/privacy).
 

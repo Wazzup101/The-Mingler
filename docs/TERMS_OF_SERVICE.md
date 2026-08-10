@@ -1,6 +1,6 @@
 # The Mingler — Terms of Service
 
-**Effective date:** June 9, 2026  
+**Effective date:** August 9, 2026
 **Operator:** Wazzup_101 (@wazzup_101 on Discord)  
 **Contact:** Use `/tickets` in Discord (category: question or feedback)
 
@@ -57,6 +57,8 @@ Some features let you **voluntarily** link TTR toon information to your Discord 
 - Sync is **user-initiated**. Mingler Sync and the PowerShell fallback read the local Companion API only after you start a scan and upload only after an explicit action.
 - The bot does **not** control your game client, account, or characters.
 - The Windows app is a free convenience tool with no gameplay automation, background syncing, or guarantee of availability or compatibility.
+- Install the app only from the Microsoft Store or review/build its public source. Modified or impersonated downloads may be unsafe.
+- No software is guaranteed vulnerability-free. Unexpected app faults may send the bounded, token-free diagnostic described in the Privacy Policy.
 - You may stop using registration features at any time; see the [Privacy Policy](./PRIVACY_POLICY.md) for data requests.
 
 Public documentation for push sync: [REGISTER_PUSH_SYNC.md](./REGISTER_PUSH_SYNC.md).

@@ -9,4 +9,3 @@
     <InternalsVisibleTo Include="MinglerSync.Core.Tests" />
   </ItemGroup>
 </Project>
-
