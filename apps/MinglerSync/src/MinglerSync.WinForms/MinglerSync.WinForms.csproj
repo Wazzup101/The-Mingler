@@ -8,11 +8,13 @@
     <AssemblyName>Mingler Sync</AssemblyName>
     <RootNamespace>MinglerSync.WinForms</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>..\..\packaging\Assets\app.ico</ApplicationIcon>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="Exists('..\..\packaging\Assets\app.ico')">
+    <ApplicationIcon>..\..\packaging\Assets\app.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\MinglerSync.Core\MinglerSync.Core.csproj" />
