@@ -23,10 +23,11 @@ These apply to the entire bot, not just the sync feature.
 
 ### Companion `/register` sync apparatus
 
-The Companion-client sync feature: the guide plus the exact files shipped to players for the `/register` push flow.
+The Companion-client sync feature includes the **Mingler Sync** Windows app plus the inspectable PowerShell files shipped to players for the `/register` push flow.
 
 | Path | Purpose |
 |------|---------|
+| [Mingler Sync (Microsoft Store)](https://apps.microsoft.com/detail/9PP2WVDVMX9L) | Recommended Windows app — install from the Microsoft Store |
 | [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md) | Push sync guide (`/register script`, `/register link`) for players |
 | [scripts/register-sync.ps1](scripts/register-sync.ps1) | PowerShell script (readable source; also shipped in `register-sync.zip`) |
 | [scripts/register-sync.cmd](scripts/register-sync.cmd) | Launcher for the PowerShell script |
@@ -41,10 +42,12 @@ Download the packaged ZIP in Discord via **`/register script`** (ephemeral). You
 Use these in **any Discord server** where The Mingler is installed.
 
 1. Accept **`/register`** terms in Discord.
-2. **`/register script`** — download and extract `register-sync.zip`; read `README.txt`.
+2. Install [Mingler Sync](https://apps.microsoft.com/detail/9PP2WVDVMX9L) from the Microsoft Store.
 3. Game open, logged in, **Companion App Support** ON (accept the in-game prompt).
-4. **`/register link`** — copy **only** the PowerShell line from step 4; run it in the folder where you extracted the ZIP.
+4. **`/register link`** — paste the private command into the app, find your toons, review, and confirm.
 5. **`/register status`** — optional confirmation.
+
+Prefer a terminal? Use **`/register script`**, extract the ZIP, and follow its `README.txt`.
 
 Full details: [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md).
 
@@ -52,7 +55,8 @@ Full details: [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md).
 
 ## Trust and safety
 
-- Only run `register-sync` if you trust **The Mingler** operator (@wazzup_101).
+- Only use Mingler Sync or `register-sync` if you trust **The Mingler** operator (@wazzup_101).
+- Install Mingler Sync from the [Microsoft Store](https://apps.microsoft.com/detail/9PP2WVDVMX9L) or inspect the public source. Modified or impersonated downloads may be unsafe.
 - Use sync URLs and tokens **only** from your own **`/register link`** response — never use foreign tokens.
 - The script reads the TTR **Companion API on your PC only** (`127.0.0.1`, ports 1547–1554) and POSTs JSON **once** to the HTTPS URL in your `/register link` (production: **`https://sync.mingler.cc`**). It does not control the game, install software, or stay running.
 
