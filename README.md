@@ -28,6 +28,7 @@ app and the existing PowerShell fallback.
 
 | Path | Purpose |
 |------|---------|
+| [Mingler Sync (Microsoft Store)](https://apps.microsoft.com/detail/9PP2WVDVMX9L) | Recommended Windows app — install from the Microsoft Store |
 | [apps/MinglerSync](apps/MinglerSync) | Inspectable Windows app source, tests, and Microsoft Store packaging |
 | [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md) | Push sync guide (`/register script`, `/register link`) for players |
 | [scripts/register-sync.ps1](scripts/register-sync.ps1) | PowerShell script (readable source; also shipped in `register-sync.zip`) |
@@ -43,13 +44,13 @@ Download the packaged ZIP in Discord via **`/register script`** (ephemeral). You
 Use these in **any Discord server** where The Mingler is installed.
 
 1. Accept **`/register`** terms in Discord.
-2. Open the game, log in, enable **Companion App Support**, and accept its prompt.
-3. Run **`/register link`** and copy the private command block.
-4. Paste it into Mingler Sync, find your toons, review the names, and confirm sync.
-5. Use **`/register status`** for optional confirmation.
+2. Install [Mingler Sync](https://apps.microsoft.com/detail/9PP2WVDVMX9L) from the Microsoft Store.
+3. Open the game, log in, enable **Companion App Support**, and accept its prompt.
+4. Run **`/register link`** and copy the private command block.
+5. Paste it into Mingler Sync, find your toons, review the names, and confirm sync.
+6. Use **`/register status`** for optional confirmation.
 
-Until the Microsoft Store listing is published, use **`/register script`** as
-the supported fallback. Extract the ZIP and follow its `README.txt`.
+Prefer a terminal? Use **`/register script`** as the supported fallback. Extract the ZIP and follow its `README.txt`.
 
 Mingler Sync uses The Mingler's current public Discord application artwork as
 its Windows and Store icon.
@@ -64,7 +65,7 @@ Full details: [docs/REGISTER_PUSH_SYNC.md](docs/REGISTER_PUSH_SYNC.md).
 - Use sync URLs and tokens **only** from your own **`/register link`** response — never use foreign tokens.
 - The app and fallback read the TTR **Companion API on your PC only** (`127.0.0.1`, ports 1547–1554) after you start a scan. They upload only after an explicit action, do not control the game, collect passwords or telemetry, or stay running in the background.
 - Unexpected app faults may send only the bounded diagnostic documented in the [Privacy Policy](docs/PRIVACY_POLICY.md); tokens and raw Companion data are excluded.
-- Install only from the Microsoft Store or inspect/build this public source. Modified or impersonated downloads may be unsafe.
+- Install only from the [Microsoft Store](https://apps.microsoft.com/detail/9PP2WVDVMX9L) or inspect/build this public source. Modified or impersonated downloads may be unsafe.
 
 While playing TTR you must still follow [TTR Terms of Service](https://www.toontownrewritten.com/terms) and [Privacy Policy](https://www.toontownrewritten.com/privacy).
 
