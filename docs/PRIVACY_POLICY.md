@@ -1,6 +1,6 @@
 # The Mingler — Privacy Policy
 
-**Effective date:** June 9, 2026  
+**Effective date:** August 9, 2026
 **Operator:** Wazzup_101 (@wazzup_101 on Discord)  
 **Contact:** Use `/tickets` in Discord (category: question or feedback), or **wazzuptoontown@gmail.com** for privacy requests
 
@@ -39,7 +39,23 @@ If you choose to use `/register` or related sync tools, we may store:
 - Game progress snapshots (for example: gag tracks, tasks, suits, fishing, gardening, racing, or similar stats) **only as imported by your sync**
 - Timestamps of last successful sync and basic sync status (success/error summaries)
 
-Sync is **opt-in** and **user-initiated**. The optional push-sync script runs on **your** game PC, reads the local Companion API (`127.0.0.1` only), and sends data to the bot only when you run it with a token from your own `/register link`.
+Sync is **opt-in** and **user-initiated**. Mingler Sync and the optional
+PowerShell fallback run on **your** game PC, read the local Companion API
+(`127.0.0.1`, ports 1547–1562, up to 16 concurrent toon sessions) only after you start a scan, and send reviewed
+data only after an explicit upload action using your own `/register link`.
+
+The Windows app keeps the one-time pairing token and Companion response in
+memory for the active session. It clears the pairing information after an
+upload attempt and does not add telemetry, background syncing, or local player
+data storage. Microsoft and GitHub separately process Store downloads and
+repository access under their own privacy policies.
+
+If an unexpected app fault occurs while a valid pairing token is available,
+the app may send a bounded diagnostic through the authenticated sync service.
+It contains the app phase/version, error type/message, and Discord user tied to
+the token. Reports are rate-limited and exclude the token, raw Companion data,
+passwords, file paths, and device inventory. Delivery may fail when the network
+or sync service is unavailable.
 
 We do **not** collect your TTR password, payment information, or full Companion authorization secrets from your game session.
 
@@ -114,6 +130,11 @@ We may retain minimal backup copies for a limited period for disaster recovery, 
 ## 7. Security
 
 We use reasonable administrative and technical measures to protect stored data (access controls, hashed tokens where applicable, and avoiding public logging of secrets). No online service is perfectly secure; use optional features only if you trust the bot operator.
+
+Install Mingler Sync only from its Microsoft Store listing or inspect/build the
+public source. A replaced or modified executable could misuse anything pasted
+into it. Keep Windows and Microsoft Defender current. The inspectable
+PowerShell package remains available for users who prefer a terminal.
 
 ---
 

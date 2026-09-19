@@ -1,44 +1,60 @@
 # Push sync for `/register`
 
-When the bot runs on a **different computer** than your game, use **push sync** (`/register script` + `/register link`).
+Use the **Mingler Sync Windows app** with `/register link` when The Mingler and
+your game run on different computers. The inspectable PowerShell package from
+`/register script` remains a supported alternative.
 
-## Flow
+## Recommended app flow
 
-1. In Discord (any server where The Mingler is installed): **`/register link`**
-   - Accept terms if prompted.
-   - Bot replies **ephemerally** with a **one-time token** (15 minutes by default) and a PowerShell command.
+1. In any Discord server where The Mingler is installed, run **`/register link`**.
+   - Accept the registration terms if prompted.
+   - The bot replies privately with a short-lived, one-time pairing command.
+2. On the game PC, open Toontown Rewritten, log into the toon(s) to sync, enable
+   **Companion App Support**, and accept the in-game prompt.
+3. Install or open [Mingler Sync](https://apps.microsoft.com/detail/9PP2WVDVMX9L).
+4. Paste the entire private pairing command into the app.
+5. Select **Find my toons**, review the names, then select **Sync to Discord**.
+6. Run **`/register status`** in Discord if you want to confirm the last sync.
 
-2. On the **game PC** (game open, toon logged in, Companion App Support ON):
-   - Download **`/register script`** → **`register-sync.zip`** (includes `README.txt`, `register-sync.cmd`, `register-sync.ps1`).
-   - Extract the ZIP to a folder and read **`README.txt`**.
-   - Run `/register link` and copy **only** the step 4 line (starts with `.\register-sync.cmd`).
-   - Open **PowerShell in that same directory**, paste the line, press Enter.
-   - The script reads **all** Companion account ports `1547–1554` (8s timeout per port) and POSTs `{ "companions": [ ... ] }` to the bot.
+The app supports up to 16 concurrent local Companion sessions. It checks only
+the local Companion service after you start a scan and uploads only after you
+confirm. It does not control the game or run background syncs.
 
-3. In Discord: **`/register status`** — confirms last sync time.
+## PowerShell alternative
 
-Public source: [github.com/Wazzup101/The-Mingler](https://github.com/Wazzup101/The-Mingler) (`scripts/register-sync-pack/`, `scripts/register-sync.ps1`, this file).
+1. Run **`/register script`** and download `register-sync.zip`.
+2. Extract the ZIP into a new folder and read its `README.txt`.
+3. Run **`/register link`** and copy only the command shown in its final step.
+4. Open PowerShell in the extracted folder, paste the command, and press Enter.
+5. Run **`/register status`** in Discord if you want to confirm the last sync.
 
-## Slash subcommands (players)
+The package contains `README.txt`, `register-sync.cmd`, and
+`register-sync.ps1`. The readable copies in this repository match the files
+distributed by the bot.
 
-- **`/register link`** — one-time token + PowerShell command for your game PC.
-- **`/register script`** — download `register-sync.zip` (ephemeral).
-- **`/register status`** — last push sync time and pending link.
+## Response visibility
 
-`/register sync` is for the bot owner only (game on the same PC as the bot).
+If your response visibility setting is public when the link is created, a
+successful toon summary may appear in the channel where you ran the command.
+With private response visibility, no channel summary is posted. Status and
+pairing details remain private.
 
-## What the script does
+## Privacy and safety
 
-| Step | Where | What |
-|------|--------|------|
-| Read | `127.0.0.1:1547–1554` on **your game PC** | TTR Companion `/all.json` (only while the game is open) |
-| Upload | HTTPS URL from **`/register link`** | One POST with your one-time token, then the script exits |
+- Never share a `/register link` command. It is tied to your Discord account,
+  expires quickly, and can be used only once.
+- Install Mingler Sync from the Microsoft Store, or inspect and build the source
+  under [`apps/MinglerSync`](../apps/MinglerSync).
+- The app keeps pairing information and Companion responses in memory only for
+  the active session and clears pairing information after an upload attempt.
+- Unexpected faults may send the limited diagnostic described in the
+  [Privacy Policy](./PRIVACY_POLICY.md). Pairing tokens, raw Companion data,
+  passwords, file paths, and device inventory are excluded.
+- Plain HTTP is accepted only for a private home-network address supplied by
+  `/register link`; internet uploads require HTTPS.
+- Modified or impersonated downloads may be unsafe. Keep Windows and Microsoft
+  Defender current and use `/tickets` if you notice suspicious behavior.
 
-Production upload host: **`https://sync.mingler.cc`** (embedded in your link command).
-
-## Security notes
-
-- Only run `register-sync` if you trust **The Mingler** operator (@wazzup_101).
-- Use sync URLs and tokens **only** from your own **`/register link`** — never share your token.
-- The script does not install software, scan your disk, or stay running in the background.
-- While playing TTR you must still follow [TTR Terms of Service](https://www.toontownrewritten.com/terms) and [Privacy Policy](https://www.toontownrewritten.com/privacy).
+Mingler Sync and The Mingler are unofficial third-party tools and are not
+affiliated with Toontown Rewritten, Disney, or their staff. Continue to follow
+all Toontown Rewritten and Discord rules.

@@ -1,0 +1,23 @@
+# Local workspace metadata
+/.*/
+!/.github/
+
+# Build and packaging output
+**/bin/
+**/obj/
+**/artifacts/
+*.user
+*.suo
+*.pfx
+*.cer
+*.key
+
+# Local configuration and runtime data
+*.local
+*.local.*
+*.log
+*.db
+*.sqlite
+*.sqlite3
+.env
+.env.*

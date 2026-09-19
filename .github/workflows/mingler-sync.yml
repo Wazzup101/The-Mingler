@@ -1,0 +1,25 @@
+name: Mingler Sync
+
+on:
+  pull_request:
+    paths: ['apps/MinglerSync/**', '.github/workflows/mingler-sync.yml']
+  push:
+    branches: [main]
+    paths: ['apps/MinglerSync/**', '.github/workflows/mingler-sync.yml']
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: apps/MinglerSync
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet build MinglerSync.sln --configuration Release --maxcpucount:1 -p:UseSharedCompilation=false
+      - run: dotnet run --project tests/MinglerSync.Core.Tests/MinglerSync.Core.Tests.csproj --configuration Release
