@@ -18,6 +18,16 @@ public sealed class MainForm : Form
     private readonly Label _status = new();
     private readonly Label _destination = new();
     private readonly ProgressBar _progress = new();
+    private readonly CheckBox _presenceToggle = new();
+    private readonly Label _presenceStatus = new();
+    private readonly DiscordPresenceConfiguration _presenceConfiguration =
+        DiscordPresenceConfiguration.Load(Path.Combine(AppContext.BaseDirectory, "discord-presence.json"));
+    private readonly PresencePreferences _presencePreferences = new(Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MinglerSync", "preferences.json"));
+    private readonly DiscordPresenceClient _presenceClient;
+    private bool _presencePreferenceSaved = true;
+    private volatile bool _closing;
+    private bool _canClose;
 
     private readonly CompanionClient _companionClient = new();
     private readonly RegisterSyncClient _syncClient = new();
@@ -25,9 +35,12 @@ public sealed class MainForm : Form
     private PairingDetails? _pairing;
     private IReadOnlyList<CompanionProfile> _profiles = Array.Empty<CompanionProfile>();
     private bool _isDemo;
+    private AboutHelpForm? _aboutHelp;
 
     public MainForm()
     {
+        _presenceClient = new DiscordPresenceClient(_presenceConfiguration);
+        _presenceClient.StatusChanged += PresenceStatusChanged;
         Text = "Mingler Sync";
         Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
         BackColor = Navy;
@@ -35,22 +48,29 @@ public sealed class MainForm : Form
         Font = new Font("Segoe UI", 10F);
         StartPosition = FormStartPosition.CenterScreen;
         MinimumSize = new Size(720, 700);
-        ClientSize = new Size(780, 740);
+        ClientSize = new Size(780, 850);
         AutoScaleMode = AutoScaleMode.Dpi;
 
         BuildLayout();
+        Shown += async (_, _) =>
+        {
+            if (_presenceToggle.Checked && !_closing)
+                await _presenceClient.SetEnabledAsync(true);
+        };
     }
 
     private void BuildLayout()
     {
         var page = new TableLayoutPanel
         {
-            Dock = DockStyle.Fill,
+            Dock = DockStyle.Top,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
             Padding = new Padding(32, 26, 32, 24),
             ColumnCount = 1,
-            RowCount = 8,
+            RowCount = 9,
             BackColor = Navy,
-            AutoScroll = true,
+            AutoScroll = false,
         };
         page.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         page.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -58,10 +78,11 @@ public sealed class MainForm : Form
         page.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         page.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         page.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        page.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        page.RowStyles.Add(new RowStyle(SizeType.Absolute, 210));
         page.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         page.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
+        page.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         page.Controls.Add(CreateHeader(), 0, 0);
         page.Controls.Add(CreateInstruction(), 0, 1);
         page.Controls.Add(CreatePairingPanel(), 0, 2);
@@ -69,11 +90,93 @@ public sealed class MainForm : Form
         page.Controls.Add(CreateDestinationLabel(), 0, 4);
         page.Controls.Add(CreateToonPanel(), 0, 5);
         page.Controls.Add(CreateStatusPanel(), 0, 6);
-        page.Controls.Add(CreateFooter(), 0, 7);
-        Controls.Add(page);
+        page.Controls.Add(CreatePresencePanel(), 0, 7);
+        page.Controls.Add(CreateFooter(), 0, 8);
+        var scroll = new Panel { Dock = DockStyle.Fill, AutoScroll = true };
+        scroll.Controls.Add(page);
+        Controls.Add(scroll);
     }
 
-    private static Control CreateHeader()
+    private Control CreatePresencePanel()
+    {
+        var panel = new TableLayoutPanel
+        {
+            Dock = DockStyle.Top, AutoSize = true, ColumnCount = 1, RowCount = 3,
+            Margin = new Padding(0, 0, 0, 14),
+        };
+        panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        _presenceToggle.Text = "Show Mingler Sync on Discord (optional)";
+        _presenceToggle.AutoSize = true;
+        _presenceToggle.ForeColor = Color.White;
+        _presenceToggle.AccessibleDescription = "Off by default. Shares only this app's activity, icon, and elapsed time while open.";
+        _presenceToggle.Enabled = _presenceConfiguration.IsConfigured;
+        _presenceToggle.Checked = _presenceConfiguration.IsConfigured && _presencePreferences.LoadEnabled();
+        _presenceToggle.CheckedChanged += PresenceToggleChanged;
+        panel.Controls.Add(_presenceToggle);
+        panel.Controls.Add(new Label
+        {
+            Text = "Optional public activity: app name, icon, and session timer only. No Toon names or sync details. Your choice is saved on this computer.",
+            AutoSize = true, ForeColor = Muted, MaximumSize = new Size(700, 0),
+            Margin = new Padding(3, 4, 0, 4),
+        });
+        _presenceStatus.AutoSize = true;
+        _presenceStatus.ForeColor = Muted;
+        _presenceStatus.MaximumSize = new Size(700, 0);
+        _presenceStatus.Text = _presenceConfiguration.IsConfigured
+            ? "Rich Presence is off unless you opt in. Discord desktop must be running."
+            : "Rich Presence is unavailable in this build: publisher Discord setup is pending.";
+        panel.Controls.Add(_presenceStatus);
+        return panel;
+    }
+
+    private async void PresenceToggleChanged(object? sender, EventArgs e)
+    {
+        if (_closing) return;
+        _presenceToggle.Enabled = false;
+        _presencePreferenceSaved = _presencePreferences.TrySaveEnabled(_presenceToggle.Checked);
+        await _presenceClient.SetEnabledAsync(_presenceToggle.Checked);
+        if (!_closing) _presenceToggle.Enabled = true;
+    }
+
+    private void PresenceStatusChanged(PresenceStatus status)
+    {
+        if (_closing || !IsHandleCreated || IsDisposed) return;
+        try
+        {
+            BeginInvoke((Action)(() =>
+            {
+                if (_closing) return;
+                _presenceStatus.Text = status switch
+                {
+                    PresenceStatus.Active => "Connected to Discord: Playing Mingler Sync. Discord controls whether others see it.",
+                    PresenceStatus.WaitingForDiscord => "Waiting for Discord desktop. Reconnects automatically while this option is on.",
+                    PresenceStatus.NotConfigured => "Rich Presence is unavailable: publisher Discord setup is pending.",
+                    _ => "Rich Presence is off.",
+                };
+                if (!_presencePreferenceSaved)
+                    _presenceStatus.Text += " Choice could not be saved; this session only. Check this option again next launch.";
+            }));
+        }
+        catch (InvalidOperationException) { /* The window closed before the status could be posted. */ }
+    }
+
+    protected override async void OnFormClosing(FormClosingEventArgs e)
+    {
+        base.OnFormClosing(e);
+        if (_canClose || e.Cancel) return;
+        e.Cancel = true;
+        if (_closing) return;
+        _closing = true;
+        _presenceToggle.Enabled = false;
+        try { await _presenceClient.DisposeAsync(); }
+        finally
+        {
+            _canClose = true;
+            Close();
+        }
+    }
+
+    private Control CreateHeader()
     {
         var panel = new TableLayoutPanel
         {
@@ -104,10 +207,11 @@ public sealed class MainForm : Form
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             Dock = DockStyle.Fill,
             ColumnCount = 1,
-            RowCount = 2,
+            RowCount = 3,
             Margin = new Padding(0),
         };
         copy.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        copy.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         copy.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         copy.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         copy.Controls.Add(new Label
@@ -127,6 +231,19 @@ public sealed class MainForm : Form
             Dock = DockStyle.Fill,
             Margin = new Padding(2, 6, 0, 0),
         }, 0, 1);
+
+        var help = new Button
+        {
+            Text = "About && Help", AutoSize = true, ForeColor = Navy, BackColor = Accent,
+            FlatStyle = FlatStyle.Flat, Margin = new Padding(0, 10, 0, 0),
+        };
+        help.Click += (_, _) =>
+        {
+            if (_aboutHelp is null || _aboutHelp.IsDisposed) _aboutHelp = new AboutHelpForm { Icon = Icon };
+            if (!_aboutHelp.Visible) _aboutHelp.Show(this);
+            else _aboutHelp.Activate();
+        };
+        copy.Controls.Add(help, 0, 2);
 
         panel.Controls.Add(icon, 0, 0);
         panel.Controls.Add(copy, 1, 0);

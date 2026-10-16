@@ -16,6 +16,8 @@ public sealed record RegisterSyncResult(
 public sealed class RegisterSyncClient
 {
     private static readonly TimeSpan UploadTimeout = TimeSpan.FromSeconds(60);
+    private const int MaxConfirmationBytes = 1024 * 1024;
+    private const string UnconfirmedMessage = "The server response could not confirm registration. Check /register status before trying again.";
 
     public async Task<RegisterSyncResult> UploadAsync(
         PairingDetails pairing,
@@ -37,68 +39,92 @@ public sealed class RegisterSyncClient
 
         try
         {
-            using var response = await client.SendAsync(request, timeout.Token);
-            var body = await response.Content.ReadAsStringAsync(timeout.Token);
+            using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, timeout.Token);
 
             if (!response.IsSuccessStatusCode)
             {
                 return new RegisterSyncResult(false, GetFriendlyFailure(response.StatusCode));
             }
 
-            return ParseSuccess(body, profiles.Count);
+            if (response.StatusCode != HttpStatusCode.OK
+                || response.Content.Headers.ContentType?.MediaType is not { } mediaType
+                || !(mediaType.Equals("application/json", StringComparison.OrdinalIgnoreCase)
+                    || mediaType.EndsWith("+json", StringComparison.OrdinalIgnoreCase))
+                || response.Content.Headers.ContentLength > MaxConfirmationBytes)
+                return Unconfirmed();
+
+            await using var body = await response.Content.ReadAsStreamAsync(timeout.Token);
+            using var buffer = new MemoryStream();
+            var chunk = new byte[8192];
+            int read;
+            while ((read = await body.ReadAsync(chunk, timeout.Token)) != 0)
+            {
+                if (buffer.Length + read > MaxConfirmationBytes) return Unconfirmed();
+                buffer.Write(chunk, 0, read);
+            }
+            return ParseSuccess(buffer.ToArray());
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
-            return new RegisterSyncResult(false, "The upload timed out. Check your internet connection, then run /register link again.");
+            return new RegisterSyncResult(false, "The upload timed out. Check /register status before getting a new pairing link or trying again.");
         }
         catch (HttpRequestException)
         {
-            return new RegisterSyncResult(false, "The app could not reach The Mingler. Check your connection or VPN, then run /register link again.");
+            return new RegisterSyncResult(false, "The connection could not confirm registration. Check your connection and /register status before trying again.");
+        }
+        catch (IOException)
+        {
+            return Unconfirmed();
         }
     }
 
-    private static RegisterSyncResult ParseSuccess(string body, int fallbackCount)
+    private static RegisterSyncResult Unconfirmed() => new(false, UnconfirmedMessage);
+
+    private static RegisterSyncResult ParseSuccess(byte[] body)
     {
         try
         {
             using var document = JsonDocument.Parse(body);
             var root = document.RootElement;
-            var count = root.TryGetProperty("syncedToons", out var countNode) && countNode.TryGetInt32(out var parsedCount)
-                ? parsedCount
-                : fallbackCount;
-            var message = root.TryGetProperty("message", out var messageNode)
-                ? messageNode.GetString() ?? $"Registered {count} toon(s)."
-                : $"Registered {count} toon(s).";
+            if (root.ValueKind != JsonValueKind.Object
+                || !root.TryGetProperty("ok", out var ok) || ok.ValueKind != JsonValueKind.True
+                || !root.TryGetProperty("syncedToons", out var countNode) || countNode.ValueKind != JsonValueKind.Number
+                || !countNode.TryGetInt32(out var count) || count < 0
+                || !root.TryGetProperty("toons", out var toonArray) || toonArray.ValueKind != JsonValueKind.Array
+                || toonArray.GetArrayLength() != count)
+                return Unconfirmed();
 
             var toons = new List<ToonSyncResult>();
-            if (root.TryGetProperty("toons", out var toonArray) && toonArray.ValueKind == JsonValueKind.Array)
+            foreach (var toon in toonArray.EnumerateArray())
             {
-                foreach (var toon in toonArray.EnumerateArray())
-                {
-                    var name = toon.TryGetProperty("name", out var nameNode) ? nameNode.GetString() ?? "Toon" : "Toon";
-                    var wasNew = toon.TryGetProperty("wasNew", out var newNode) && newNode.ValueKind == JsonValueKind.True;
-                    var updated = toon.TryGetProperty("updated", out var updatedNode) && updatedNode.ValueKind == JsonValueKind.Array
-                        ? updatedNode.EnumerateArray().Select(item => item.GetString()).Where(item => item is not null).Cast<string>().ToArray()
-                        : Array.Empty<string>();
-                    toons.Add(new ToonSyncResult(name, wasNew, updated));
-                }
+                if (toon.ValueKind != JsonValueKind.Object
+                    || !toon.TryGetProperty("name", out var nameNode) || nameNode.ValueKind != JsonValueKind.String
+                    || string.IsNullOrWhiteSpace(nameNode.GetString())
+                    || !toon.TryGetProperty("wasNew", out var newNode)
+                    || newNode.ValueKind is not (JsonValueKind.True or JsonValueKind.False)
+                    || !toon.TryGetProperty("updated", out var updatedNode) || updatedNode.ValueKind != JsonValueKind.Array
+                    || updatedNode.EnumerateArray().Any(item => item.ValueKind != JsonValueKind.String))
+                    return Unconfirmed();
+                toons.Add(new ToonSyncResult(nameNode.GetString()!, newNode.GetBoolean(),
+                    updatedNode.EnumerateArray().Select(item => item.GetString()!).ToArray()));
             }
 
-            return new RegisterSyncResult(true, message, count, toons);
+            // Only trusted confirmation fields control success; arbitrary server copy is not UI text.
+            return new RegisterSyncResult(true, $"Registered {count} toon(s).", count, toons);
         }
         catch (JsonException)
         {
-            return new RegisterSyncResult(true, $"Registered {fallbackCount} toon(s).", fallbackCount);
+            return Unconfirmed();
         }
     }
 
     private static string GetFriendlyFailure(HttpStatusCode statusCode) => statusCode switch
     {
         HttpStatusCode.Unauthorized => "That pairing link expired or was already used. Run /register link again and paste the new command.",
-        HttpStatusCode.Forbidden => "The server rejected the connection. Turn off your VPN and make sure you are using the network described in Discord.",
+        HttpStatusCode.Forbidden => "The server rejected the connection. Check your connection settings or contact The Mingler staff.",
         HttpStatusCode.RequestEntityTooLarge => "The toon data was too large. Try again with fewer game accounts open, or contact The Mingler staff.",
-        HttpStatusCode.UnprocessableEntity => "The server received the data but could not import a toon. Stay logged in-game, accept the Companion prompt, and try again.",
-        >= HttpStatusCode.InternalServerError => "The Mingler is temporarily unavailable. Wait a minute, then run /register link again.",
+        HttpStatusCode.UnprocessableEntity => "The server could not complete the import. Check /register status before getting a new pairing link or trying again.",
+        >= HttpStatusCode.InternalServerError => "The Mingler could not confirm the import. Check /register status before getting a new pairing link or trying again.",
         _ => "Registration did not complete. Run /register link again and retry."
     };
 }

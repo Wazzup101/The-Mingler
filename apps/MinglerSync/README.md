@@ -17,9 +17,9 @@ Install from the [Microsoft Store](https://apps.microsoft.com/detail/9PP2WVDVMX9
 ## Safe demonstration
 
 Select **Try safe demo** to exercise the review and completion interface with
-fictional sample toons. Demo mode does not require Discord or the game and does
-not contact localhost or any remote service. It cannot register or modify toon
-data.
+fictional sample toons. The demo does not require Discord or the game and does
+not scan or upload anything. It cannot register or modify toon data. Optional
+Rich Presence is independent of the demo and stays off unless enabled.
 
 Each explicit scan checks only local Companion API ports `1547` through `1562`,
 supporting up to 16 concurrent toon sessions.
@@ -29,18 +29,48 @@ attempt. The app does not store toon payloads, credentials, or telemetry.
 
 When an unexpected fault occurs while a still-valid pairing token is present,
 the app may send a bounded diagnostic through the authenticated sync service.
-It contains the phase, app version, error type/message, and Discord user tied to
+It contains the known phase, app version, fixed error category/message, and Discord user tied to
 the token. It excludes the token, raw Companion response, passwords, file paths,
 and device inventory. Reports are rate-limited and may not arrive when the
 network or sync service is unavailable.
+Raw exception text is omitted rather than redacted.
+
+## Optional Discord Rich Presence
+
+**Show Mingler Sync on Discord** is off by default. When enabled, the Windows
+app uses the running Discord desktop client to show **Playing Mingler Sync**,
+the same app icon, and elapsed time for the current enabled session. Reconnecting
+Discord does not reset the timer; turning the option off and back on, or reopening
+the app, starts a new timer. Turning it off or closing the app requests activity
+removal on a best-effort basis; a disconnected Discord client may take time to clear it.
+Discord's own activity/privacy settings still control its visibility.
+
+Only the app identity, fixed icon, and session start time are shared. No Toon
+names, pairing information, registration results, server names, or file paths
+enter the activity. The app saves only the on/off preference in
+`%LOCALAPPDATA%\MinglerSync\preferences.json`; missing or invalid preferences mean
+off. This does not start Discord, enable Windows startup, or scan/sync game data.
+
+The publisher application is configured in this development build; see
+[Discord application setup and verification](DISCORD_RICH_PRESENCE.md).
+This does not opt anyone in or update the installed/Store app. An owner-approved
+live check confirmed the matching icon, elapsed timer and clear-on-stop behavior.
+Authenticated game sync and Store installation still require separate qualification.
+If publisher configuration is missing or invalid, the option is visibly unavailable.
 
 ## Developer build
 
-Building the app requires the .NET 10 SDK.
+Requires the .NET 10 SDK on Windows. This source is candidate **1.0.3-rc.2**,
+not the installed Store release. **About & Help** provides three scrollable
+topics, fixed policy/source/Store links and safe troubleshooting guidance.
+Unconfirmed server replies never produce a registration-success screen; check
+`/register status` before repeating an upload.
 
 ```powershell
 dotnet build .\MinglerSync.sln --maxcpucount:1 -p:UseSharedCompilation=false
 dotnet run --project .\tests\MinglerSync.Core.Tests\MinglerSync.Core.Tests.csproj
+dotnet run --project .\tests\MinglerSync.ReleaseChecks\MinglerSync.ReleaseChecks.csproj
+dotnet run --project .\tests\MinglerSync.WinForms.Tests\MinglerSync.WinForms.Tests.csproj
 ```
 
 Run the application:
@@ -55,8 +85,8 @@ Create a portable self-contained build:
 dotnet publish .\src\MinglerSync.WinForms\MinglerSync.WinForms.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
 ```
 
-Do not distribute a development build as the default player download. Public
-releases require signing, checksums, and clear publisher/download information.
+Do not distribute a development build as the default player download. Stage 2
+requires release signing, checksums, and clear publisher/download information.
 
 ## Microsoft Store package
 

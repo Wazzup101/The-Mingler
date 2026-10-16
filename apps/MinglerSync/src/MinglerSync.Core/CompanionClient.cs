@@ -10,7 +10,6 @@ public sealed class CompanionClient
     public const int FirstPort = 1547;
     public const int LastPort = 1562;
 
-    private const string ProductVersion = "1.0.2";
     private static readonly TimeSpan PortTimeout = TimeSpan.FromSeconds(8);
 
     public async Task<IReadOnlyList<CompanionProfile>> FindProfilesAsync(CancellationToken cancellationToken = default)
@@ -43,7 +42,7 @@ public sealed class CompanionClient
             request.Headers.Host = $"localhost:{port}";
             request.Headers.TryAddWithoutValidation(
                 "User-Agent",
-                $"The Mingler/{ProductVersion} (Discord Bot - Mingler Sync) Windows");
+                $"The Mingler/{AppRelease.Version} (Discord Bot - Mingler Sync) Windows");
             request.Headers.TryAddWithoutValidation("Authorization", authorization);
             request.Headers.TryAddWithoutValidation("Accept", "application/json");
 

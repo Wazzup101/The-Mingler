@@ -1,6 +1,6 @@
 # The Mingler — Terms of Service
 
-**Effective date:** August 9, 2026
+**Effective date:** October 15, 2026
 **Operator:** Wazzup_101 (@wazzup_101 on Discord)  
 **Contact:** Use `/tickets` in Discord (category: question or feedback)
 
@@ -10,7 +10,7 @@
 
 By adding **The Mingler** to a Discord server, using its commands, or accepting registration terms in Discord, you agree to these Terms of Service (“Terms”). If you do not agree, do not use the bot.
 
-These Terms apply to **The Mingler** only. They do **not** replace [Toontown Rewritten’s Terms of Service](https://www.toontownrewritten.com/terms) or [Privacy Policy](https://www.toontownrewritten.com/privacy). You must follow TTR’s rules while playing the game.
+These Terms apply to **The Mingler** and its optional Windows client, **Mingler Sync**. They do **not** replace [Toontown Rewritten’s Terms of Service](https://www.toontownrewritten.com/terms) or [Privacy Policy](https://www.toontownrewritten.com/privacy). You must follow TTR’s rules while playing the game.
 
 ---
 
@@ -57,6 +57,7 @@ Some features let you **voluntarily** link TTR toon information to your Discord 
 - Sync is **user-initiated**. Mingler Sync and the PowerShell fallback read the local Companion API only after you start a scan and upload only after an explicit action.
 - The bot does **not** control your game client, account, or characters.
 - The Windows app is a free convenience tool with no gameplay automation, background syncing, or guarantee of availability or compatibility.
+- Optional Discord Rich Presence is off by default and separate from registration. Enabling it lets Discord display the app identity, fixed icon and session timer under your Discord activity settings. You can disable it at any time; it does not share Toon data or provide game invites. See the Privacy Policy for details.
 - Install the app only from the Microsoft Store or review/build its public source. Modified or impersonated downloads may be unsafe.
 - No software is guaranteed vulnerability-free. Unexpected app faults may send the bounded, token-free diagnostic described in the Privacy Policy.
 - You may stop using registration features at any time; see the [Privacy Policy](./PRIVACY_POLICY.md) for data requests.

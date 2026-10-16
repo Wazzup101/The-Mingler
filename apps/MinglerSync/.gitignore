@@ -2,3 +2,4 @@ artifacts/
 packaging/Assets/
 **/bin/
 **/obj/
+.build-home/

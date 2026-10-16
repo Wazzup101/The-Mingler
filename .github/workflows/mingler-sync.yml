@@ -23,3 +23,5 @@ jobs:
           dotnet-version: 10.0.x
       - run: dotnet build MinglerSync.sln --configuration Release --maxcpucount:1 -p:UseSharedCompilation=false
       - run: dotnet run --project tests/MinglerSync.Core.Tests/MinglerSync.Core.Tests.csproj --configuration Release
+      - run: dotnet run --project tests/MinglerSync.ReleaseChecks/MinglerSync.ReleaseChecks.csproj --configuration Release
+      - run: dotnet run --project tests/MinglerSync.WinForms.Tests/MinglerSync.WinForms.Tests.csproj --configuration Release

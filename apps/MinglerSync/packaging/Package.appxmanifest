@@ -9,7 +9,7 @@
   <Identity
     Name="Wazzup101.MinglerSync"
     Publisher="CN=A978790A-6A85-4CF5-9754-ADDB899CE13D"
-    Version="1.0.2.0" />
+    Version="1.0.3.0" />
 
   <Properties>
     <DisplayName>Mingler Sync</DisplayName>

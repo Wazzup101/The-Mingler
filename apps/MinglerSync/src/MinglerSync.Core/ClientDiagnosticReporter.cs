@@ -23,13 +23,7 @@ public sealed class ClientDiagnosticReporter
                 HttpMethod.Post,
                 new Uri(pairing.SyncUri, "/api/register/client-error"));
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", pairing.Token);
-            request.Content = JsonContent.Create(new
-            {
-                phase = Normalize(phase, 32),
-                code = Normalize(exception.GetType().Name, 64),
-                message = NormalizeMessage(exception.Message),
-                appVersion = "1.0.2",
-            });
+            request.Content = JsonContent.Create(CreateDiagnostic(phase, exception));
 
             using var response = await client.SendAsync(request, timeout.Token);
         }
@@ -39,23 +33,20 @@ public sealed class ClientDiagnosticReporter
         }
     }
 
-    private static string Normalize(string? value, int maximumLength)
+    // Arbitrary exception text can contain secrets, URLs, names or paths. Do not
+    // try to redact it; send a fixed category and known operation phase only.
+    internal static object CreateDiagnostic(string phase, Exception exception) => new
     {
-        var normalized = string.Join(' ', (value ?? string.Empty).Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
-        return normalized.Length <= maximumLength ? normalized : normalized[..maximumLength];
-    }
-
-    private static string NormalizeMessage(string? value)
-    {
-        var normalized = Normalize(value, 600);
-        normalized = System.Text.RegularExpressions.Regex.Replace(
-            normalized,
-            @"(?i)\b[a-z]:\\[^\s]+",
-            "[local path]");
-        normalized = System.Text.RegularExpressions.Regex.Replace(
-            normalized,
-            @"\\\\[^\s]+",
-            "[network path]");
-        return Normalize(normalized, 300);
-    }
+        phase = phase is "companion_scan" or "sync_upload" ? phase : "unknown",
+        code = exception switch
+        {
+            System.Text.Json.JsonException => "InvalidJson",
+            HttpRequestException => "NetworkError",
+            OperationCanceledException => "Cancelled",
+            IOException => "InputOutputError",
+            _ => "UnexpectedError",
+        },
+        message = "Unexpected client fault; raw error text omitted for privacy.",
+        appVersion = AppRelease.Version,
+    };
 }

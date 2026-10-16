@@ -13,7 +13,7 @@ Check("parses current Discord command", () =>
 
 Check("accepts private LAN HTTP", () =>
 {
-    var input = @".\register-sync.cmd -SyncUrl ""http://192.168.50.10:3847/api/register/sync"" -Token ""abc""";
+    var input = @".\register-sync.cmd -SyncUrl ""http://192.168.1.152:3847/api/register/sync"" -Token ""abc""";
     Require(PairingCommandParser.TryParse(input, out _, out _));
 });
 
@@ -66,6 +66,24 @@ Check("rejects an unexpectedly large pasted command", () =>
 {
     Require(!PairingCommandParser.TryParse(new string('x', 9000), out _, out _));
 });
+
+Check("diagnostics omit arbitrary private text and unknown phases", () =>
+{
+    const string privateText = "synthetic-token ToonName C:\\Users\\Fixture\\private name.txt https://example.invalid/?token=synthetic-token";
+    var json = JsonSerializer.Serialize(ClientDiagnosticReporter.CreateDiagnostic(privateText, new InvalidOperationException(privateText)));
+    Require(!json.Contains("synthetic-token") && !json.Contains("ToonName") && !json.Contains("example.invalid") && !json.Contains("private name"));
+    using var document = JsonDocument.Parse(json);
+    Require(document.RootElement.GetProperty("phase").GetString() == "unknown");
+    Require(document.RootElement.GetProperty("appVersion").GetString() == AppRelease.Version);
+});
+Check("diagnostics preserve only known category and operation", () =>
+{
+    using var document = JsonDocument.Parse(JsonSerializer.Serialize(ClientDiagnosticReporter.CreateDiagnostic("sync_upload", new HttpRequestException("private request URL"))));
+    Require(document.RootElement.GetProperty("phase").GetString() == "sync_upload");
+    Require(document.RootElement.GetProperty("code").GetString() == "NetworkError");
+});
+
+PresenceTests.Run(Check);
 
 foreach (var failure in failures)
 {

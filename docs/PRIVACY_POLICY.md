@@ -1,6 +1,6 @@
 # The Mingler — Privacy Policy
 
-**Effective date:** August 9, 2026
+**Effective date:** October 15, 2026
 **Operator:** Wazzup_101 (@wazzup_101 on Discord)  
 **Contact:** Use `/tickets` in Discord (category: question or feedback), or **wazzuptoontown@gmail.com** for privacy requests
 
@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This Privacy Policy explains how **The Mingler** (“the bot,” “we,” “us”) handles information when you use the bot on Discord.
+This Privacy Policy explains how **The Mingler** (“the bot,” “we,” “us”) handles information when you use the bot on Discord or its optional Windows client, **Mingler Sync**.
 
 The Mingler is a **third-party** tool. It is **not** operated by Toontown Rewritten or Disney. Using the bot does not change how TTR handles your in-game data—see [TTR’s Privacy Policy](https://www.toontownrewritten.com/privacy) for that.
 
@@ -52,12 +52,31 @@ repository access under their own privacy policies.
 
 If an unexpected app fault occurs while a valid pairing token is available,
 the app may send a bounded diagnostic through the authenticated sync service.
-It contains the app phase/version, error type/message, and Discord user tied to
+It contains the known app phase/version, fixed error category/message, and Discord user tied to
 the token. Reports are rate-limited and exclude the token, raw Companion data,
-passwords, file paths, and device inventory. Delivery may fail when the network
+passwords, raw exception text, file paths, and device inventory. Delivery may fail when the network
 or sync service is unavailable.
 
 We do **not** collect your TTR password, payment information, or full Companion authorization secrets from your game session.
+
+### Optional Mingler Sync Discord activity
+
+Rich Presence is **off by default** and separate from game-data sync. If you opt
+in, Mingler Sync sends its application identity, fixed icon and session start
+time to your local Discord desktop client. Discord may display **Playing Mingler
+Sync** and an elapsed timer to other people, subject to your Discord activity and
+privacy settings and [Discord's Privacy Policy](https://discord.com/privacy).
+No Toon names, pairing commands or tokens, registration results, server names,
+or file paths are included in the activity. It does not invite people to a game
+or enable background game scanning or syncing.
+
+The app saves only a settings-schema number and your on/off choice in its local
+Windows preferences file; this preference is not uploaded to the bot. You can
+turn it off at any time. Disabling it or closing the app requests activity
+removal on a best-effort basis; a disconnected Discord client may take time to
+clear the display. A new enabled session starts a new timer. This optional
+activity does not require a Discord account token or authorize the app to read
+your messages.
 
 ### Reminders, to-dos, and notifications
 
