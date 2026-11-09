@@ -1,6 +1,6 @@
 # The Mingler — Privacy Policy
 
-**Effective date:** October 15, 2026
+**Effective date:** November 8, 2026
 **Operator:** Wazzup_101 (@wazzup_101 on Discord)  
 **Contact:** Use `/tickets` in Discord (category: question or feedback), or **wazzuptoontown@gmail.com** for privacy requests
 
@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This Privacy Policy explains how **The Mingler** (“the bot,” “we,” “us”) handles information when you use the bot on Discord or its optional Windows client, **Mingler Sync**.
+This Privacy Policy explains how **The Mingler** (“the bot,” “we,” “us”) handles information when you use the bot on Discord or its optional desktop client, **Mingler Sync**, including the Windows release and separately labeled Linux previews.
 
 The Mingler is a **third-party** tool. It is **not** operated by Toontown Rewritten or Disney. Using the bot does not change how TTR handles your in-game data—see [TTR’s Privacy Policy](https://www.toontownrewritten.com/privacy) for that.
 
@@ -40,15 +40,14 @@ If you choose to use `/register` or related sync tools, we may store:
 - Timestamps of last successful sync and basic sync status (success/error summaries)
 
 Sync is **opt-in** and **user-initiated**. Mingler Sync and the optional
-PowerShell fallback run on **your** game PC, read the local Companion API
+PowerShell fallback run on **your** game computer (the PowerShell fallback is for Windows), read the local Companion API
 (`127.0.0.1`, ports 1547–1562, up to 16 concurrent toon sessions) only after you start a scan, and send reviewed
 data only after an explicit upload action using your own `/register link`.
 
-The Windows app keeps the one-time pairing token and Companion response in
+The desktop app keeps the one-time pairing token and Companion response in
 memory for the active session. It clears the pairing information after an
 upload attempt and does not add telemetry, background syncing, or local player
-data storage. Microsoft and GitHub separately process Store downloads and
-repository access under their own privacy policies.
+data storage. Linux preview preferences are separate from the Windows Store release. Microsoft and GitHub separately process Store downloads, repository access and GitHub release downloads under their own privacy policies.
 
 If an unexpected app fault occurs while a valid pairing token is available,
 the app may send a bounded diagnostic through the authenticated sync service.
@@ -71,7 +70,7 @@ or file paths are included in the activity. It does not invite people to a game
 or enable background game scanning or syncing.
 
 The app saves only a settings-schema number and your on/off choice in its local
-Windows preferences file; this preference is not uploaded to the bot. You can
+preferences file for your operating-system account; this preference is not uploaded to the bot. You can
 turn it off at any time. Disabling it or closing the app requests activity
 removal on a best-effort basis; a disconnected Discord client may take time to
 clear the display. A new enabled session starts a new timer. This optional
@@ -150,10 +149,7 @@ We may retain minimal backup copies for a limited period for disaster recovery, 
 
 We use reasonable administrative and technical measures to protect stored data (access controls, hashed tokens where applicable, and avoiding public logging of secrets). No online service is perfectly secure; use optional features only if you trust the bot operator.
 
-Install Mingler Sync only from its Microsoft Store listing or inspect/build the
-public source. A replaced or modified executable could misuse anything pasted
-into it. Keep Windows and Microsoft Defender current. The inspectable
-PowerShell package remains available for users who prefer a terminal.
+Install the Windows release from its Microsoft Store listing. For a separately labeled Linux preview, use only the operator-approved versioned release at https://github.com/Wazzup101/The-Mingler/releases, compare its published SHA-256 checksum, and read the platform limitations. A checksum is not a publisher signature. Do not bypass operating-system security warnings. You may also inspect/build the public source. A replaced or modified executable could misuse anything pasted into it. Keep your operating system and security tools current. The inspectable PowerShell package remains available for Windows users who prefer a terminal.
 
 ---
 
@@ -208,3 +204,4 @@ Privacy questions or requests:
 ---
 
 *The Mingler — third-party fan tool. Not affiliated with Toontown Rewritten or Disney.*
+
