@@ -1,0 +1,62 @@
+name: Verify and attest approved Linux release
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_existing_release:
+        description: Sign approval of the pinned beta.1 assets (does not rebuild or publish an app)
+        type: boolean
+        required: true
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mingler-linux-release-attestation
+  cancel-in-progress: false
+
+jobs:
+  attest-approved-assets:
+    if: github.repository == 'Wazzup101/The-Mingler' && github.ref == 'refs/heads/main' && inputs.confirm_existing_release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - name: Read reviewed release manifest and verifier
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts/release-security
+      - name: Download only the five pinned release assets without executing them
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir approved-assets
+          gh release download mingler-sync-v1.1.0-beta.1-linux --repo Wazzup101/The-Mingler --dir approved-assets \
+            --pattern MinglerSync-1.1.0-beta.1-linux-x64.tar.gz --pattern APP-FILE-SHA256SUMS.txt \
+            --pattern README-FIRST.md --pattern run-preview.sh --pattern SHA256SUMS.txt
+      - name: Verify every byte against the reviewed manifest and write the approval claim
+        run: python3 scripts/release-security/verify-approved-release.py approved-assets --predicate approved-release.json
+      - name: Sign release approval without claiming these binaries were built here
+        id: attest
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-path: approved-assets/*
+          predicate-type: https://mingler.cc/attestations/release-approval/v1
+          predicate-path: approved-release.json
+          create-storage-record: false
+      - name: Verify signed identity and subjects
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUNDLE: ${{ steps.attest.outputs.bundle-path }}
+        run: |
+          for artifact in approved-assets/*; do
+            gh attestation verify "$artifact" --bundle "$BUNDLE" --repo Wazzup101/The-Mingler \
+              --signer-workflow Wazzup101/The-Mingler/.github/workflows/mingler-linux-release-attestation.yml \
+              --source-ref refs/heads/main --deny-self-hosted-runners \
+              --predicate-type https://mingler.cc/attestations/release-approval/v1
+          done

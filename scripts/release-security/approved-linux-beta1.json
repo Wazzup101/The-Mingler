@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "repository": "Wazzup101/The-Mingler",
+  "releaseTag": "mingler-sync-v1.1.0-beta.1-linux",
+  "assets": {
+    "MinglerSync-1.1.0-beta.1-linux-x64.tar.gz": {"bytes": 44994630, "sha256": "5ec30b0fb0622a134facb321187134a671684a3b1641f37f7d767e3d1a20c709"},
+    "APP-FILE-SHA256SUMS.txt": {"bytes": 34654, "sha256": "ed7bd866287555a7fb93196c6b99a8042ddade2c24f987fca0597cdf85d4e42b"},
+    "README-FIRST.md": {"bytes": 2781, "sha256": "09c071cdb2daf371134e0c78a5cd4c1accaa99e39eeb3df607d62eb0310bd01a"},
+    "run-preview.sh": {"bytes": 3300, "sha256": "58047dd4a6be75089811e8e284d0985b62319b9b16e78e7df99f3b2d5ed24d16"},
+    "SHA256SUMS.txt": {"bytes": 108, "sha256": "a02a1a84b16933877021b53ae9266d3d4bf8e0039ca50cb9d02112a18355d58d"}
+  }
+}
