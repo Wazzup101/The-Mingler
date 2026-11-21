@@ -39,6 +39,10 @@ Download the packaged ZIP in Discord via **`/register script`** (ephemeral). You
 
 ---
 
+## Sources and credits
+
+See the [ToonTask sources and credits](docs/SOURCES.md) for the community taskline guides behind MyToons, firsthand research, and the reference license.
+
 ## Quick start (players)
 
 Use these in **any Discord server** where The Mingler is installed.
