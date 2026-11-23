@@ -5,6 +5,7 @@ flow. It performs the same user-initiated, read-only Companion API sync as the
 existing PowerShell package, but without requiring players to use a terminal.
 
 Install from the [Microsoft Store](https://apps.microsoft.com/detail/9PP2WVDVMX9L).
+See the [release notes and version history](./RELEASE_NOTES.md).
 
 ## Player flow
 
@@ -14,7 +15,7 @@ Install from the [Microsoft Store](https://apps.microsoft.com/detail/9PP2WVDVMX9
 4. Open Mingler Sync and paste the command.
 5. Select **Find my toons**, review the names, then select **Sync to Discord**.
 
-## Safe demonstration
+## Safe demonstration (Windows 1.0.2 only)
 
 Select **Try safe demo** to exercise the review and completion interface with
 fictional sample toons. The demo does not require Discord or the game and does
